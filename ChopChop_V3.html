@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChopChop: Logistics Carbon Emissions & Green Project Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom right, #1a202c, #0d3b3b); /* Dark Slate Gray to Dark Teal */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+            overflow-y: auto; /* Enable scrolling for longer content */
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d3748;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2c9393;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #247a7a;
+        }
+        /* General input/select styling (dark theme compatible) */
+        .input-field {
+            background-color: #2d3748; /* Slightly lighter black/dark gray for input fields */
+            border-color: #2c9393; /* Teal border */
+            color: #e2e8f0; /* Light text color */
+            padding: 0.75rem 1rem; /* Adjust padding */
+            border-width: 1px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #38b2ac; /* Brighter teal on focus */
+            box-shadow: 0 0 0 2px rgba(56, 178, 172, 0.5); /* Teal glow on focus */
+        }
+        .select-field {
+             background-color: #2d3748;
+             border-color: #2c9393;
+             color: #e2e8f0;
+             padding: 0.75rem 1rem;
+             border-width: 1px;
+             appearance: none; /* Remove default dropdown arrow */
+             -webkit-appearance: none;
+             -moz-appearance: none;
+             background-image: url('data:image/svg+xml;utf8,<svg fill="%23e2e8f0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* Custom SVG arrow */
+             background-repeat: no-repeat;
+             background-position: right 0.75rem center;
+             background-size: 1.5em;
+             transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .select-field:focus {
+            outline: none;
+            border-color: #38b2ac;
+            box-shadow: 0 0 0 2px rgba(56, 178, 172, 0.5);
+        }
+        .shadow-teal {
+            box-shadow: 0 10px 15px -3px rgba(44, 147, 147, 0.5), 0 4px 6px -2px rgba(44, 147, 147, 0.25);
+        }
+        .tab-button {
+            @apply px-4 py-2 rounded-t-lg font-semibold text-lg;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .tab-button.active {
+            @apply bg-gray-800 text-teal-400 border-b-2 border-teal-500;
+        }
+        .tab-button.inactive {
+            @apply bg-gray-900 text-gray-400 hover:text-teal-300;
+        }
+        .tab-content {
+            @apply p-6 bg-gray-800 rounded-b-lg;
+            min-height: 400px; /* Ensure content area is visible */
+        }
+
+        /* NEW STYLES FOR CALCULATOR SECTION (LIGHT THEME FROM SCREENS) */
+        #calculatorContent {
+            background-color: #e0f2f2; /* Lighter shade of teal/green - was #ffffff */
+            color: #333; /* Dark text */
+            border-color: #e0e0e0; /* Lighter border */
+            border-radius: 0.75rem; /* Rounded corners */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            min-height: 550px; /* Make it taller to fit new content */
+        }
+        #calculatorContent .input-field-light {
+            background-color: #f5f5f5;
+            border-color: #e0e0e0;
+            color: #333;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.5rem;
+            border-width: 1px;
+        }
+        #calculatorContent .input-field-light:focus {
+            outline: none;
+            border-color: #6a5acd; /* Royal Purple */
+            box-shadow: 0 0 0 2px rgba(106, 90, 205, 0.3);
+        }
+        #calculatorContent .select-field-light {
+            background-color: #f5f5f5;
+            border-color: #e0e0e0;
+            color: #333;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.5rem;
+            border-width: 1px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* Dark arrow */
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        #calculatorContent .select-field-light:focus {
+            outline: none;
+            border-color: #6a5acd;
+            box-shadow: 0 0 0 2px rgba(106, 90, 205, 0.3);
+        }
+        .cargo-details-title, .emissions-calc-title {
+            color: #333;
+            font-weight: 700;
+            font-size: 1.875rem; /* 3xl */
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px; /* Wider toggle */
+            height: 24px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #6a5acd; /* Royal Purple */
+        }
+        input:focus + .slider {
+            box-shadow: 0 0 1px #6a5acd;
+        }
+        input:checked + .slider:before {
+            -webkit-transform: translateX(20px); /* Move further */
+            -ms-transform: translateX(20px);
+            transform: translateX(20px);
+        }
+        .mode-button {
+            @apply flex flex-col items-center justify-center p-4 rounded-lg bg-gray-100 border border-gray-200 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition duration-200;
+            width: 100px;
+            height: 90px;
+            text-align: center;
+            font-size: 0.875rem; /* text-sm */
+        }
+        .mode-button.selected {
+            @apply bg-purple-100 border-purple-500 text-purple-700 font-semibold;
+        }
+        .mode-button i {
+            font-size: 2rem; /* Adjust icon size */
+            margin-bottom: 0.5rem;
+        }
+        .swap-icon {
+            color: #6a5acd; /* Royal Purple */
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+        }
+        .swap-icon:hover {
+            transform: rotateY(180deg);
+        }
+        .table-header {
+            background-color: #e0e0e0;
+            color: #555;
+            font-weight: 600;
+        }
+        .table-row {
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .table-row:last-child {
+            border-bottom: none;
+        }
+        .table-cell {
+            padding: 0.75rem 1rem;
+        }
+        .total-sum {
+            background-color: #f5f5f5;
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+    </style>
+</head>
+<body class="font-inter">
+
+    <div class="bg-gray-900 text-white p-8 md:p-10 rounded-xl shadow-2xl shadow-teal w-full max-w-2xl border-2 border-teal-600">
+        <div class="flex flex-col items-center mb-8">
+            <!-- ChopChop Logo: Using self-contained SVG for reliability -->
+            <svg class="w-20 h-20 text-teal-500 mb-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9v-2h2v2zm0-4H9v-2h2v2zm0-4H9V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zM12 6a1 1 0 110-2 1 1 0 010 2zm-5 6a1 1 0 110-2 1 1 0 010 2zm10 0a1 1 0 110-2 1 1 0 010 2z"/>
+                <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none" class="text-teal-600"/>
+                <path d="M12 2v20M2 12h20" stroke="currentColor" stroke-width="2" class="text-teal-600"/>
+            </svg>
+            <h1 class="text-4xl md:text-5xl font-bold text-teal-400 text-center leading-tight">
+                ChopChop
+            </h1>
+            <p class="text-gray-400 text-center mt-2 text-lg">
+                Your Logistics Emissions & Green Project Partner
+            </p>
+            <!-- Conceptual Login/Register link -->
+            <button id="loginRegisterBtn" class="mt-4 text-teal-400 hover:text-teal-300 text-sm font-semibold">
+                Login / Register (Conceptual)
+            </button>
+        </div>
+
+        <!-- Tabs for different sections -->
+        <div class="flex justify-center mb-0 border-b border-gray-700">
+            <button id="onboardingTab" class="tab-button inactive">
+                SME Onboarding
+            </button>
+            <button id="calculatorTab" class="tab-button active">
+                Emissions Calculator
+            </button>
+            <button id="projectsTab" class="tab-button inactive">
+                Green Projects
+            </button>
+            <button id="lenderTab" class="tab-button inactive">
+                Lender Portal
+            </button>
+        </div>
+
+        <!-- Tab Content Containers -->
+        <!-- SME Onboarding Content -->
+        <div id="onboardingContent" class="tab-content hidden">
+            <h2 class="text-2xl font-bold text-teal-300 text-center mb-6">SME Onboarding (Conceptual)</h2>
+            <p class="text-gray-300 text-center mb-8">
+                Experience our streamlined process for quick KYC/KYB.
+            </p>
+            <div class="space-y-6 bg-gray-700 p-6 rounded-lg border border-teal-700">
+                <div>
+                    <label for="onboardCompanyName" class="block text-sm font-medium text-gray-300 mb-2">Company Name</label>
+                    <input type="text" id="onboardCompanyName" placeholder="e.g., Global Shipping LLC" class="mt-1 block w-full rounded-md shadow-sm input-field" />
+                </div>
+                <div>
+                    <label for="tradeLicense" class="block text-sm font-medium text-gray-300 mb-2">UAE Trade License Number</label>
+                    <input type="text" id="tradeLicense" placeholder="e.g., 1234567" class="mt-1 block w-full rounded-md shadow-sm input-field" />
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-gray-300 text-sm">Verification Status:</span>
+                    <span id="verificationStatus" class="text-red-400 font-semibold">Pending</span>
+                    <button id="verifyBtn" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded-md transition duration-300">
+                        Simulate Verify
+                    </button>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-md border border-teal-800 text-gray-400 text-sm">
+                    <p>Upon real verification, your company profile would be activated, granting access to full ChopChop features.</p>
+                    <p class="mt-2 flex items-center">
+                        <svg class="w-4 h-4 mr-1 text-teal-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        Your data is protected under UAE data privacy laws and we adhere to relevant financial regulations.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emissions Calculator Content - REDESIGNED -->
+        <div id="calculatorContent" class="tab-content">
+            <h2 class="emissions-calc-title">Cargo Details</h2>
+            <div id="cargoDetailsSection" class="space-y-6">
+                <!-- Load Type Radio Buttons -->
+                <div class="flex items-center space-x-6">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="loadType" value="containers" class="form-radio text-purple-600 h-4 w-4" checked>
+                        <span class="ml-2 text-gray-800">Containers</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="loadType" value="looseCargo" class="form-radio text-purple-600 h-4 w-4">
+                        <span class="ml-2 text-gray-800">Loose Cargo</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="loadType" value="bulk" class="form-radio text-purple-600 h-4 w-4">
+                        <span class="ml-2 text-gray-800">Bulk</span>
+                    </label>
+                </div>
+
+                <!-- Temperature and Weight Toggles -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Temperature</label>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-gray-800">Dry</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="tempReeferToggle">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="text-gray-800">Reefer</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Weight</label>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-gray-800">KG</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="weightUnitToggle">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="text-gray-800">MT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Container Details -->
+                <div id="containerDetailsInputs" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label for="containerSize" class="block text-sm font-medium text-gray-600 mb-2">Container</label>
+                            <select id="containerSize" class="mt-1 block w-full rounded-md shadow-sm select-field-light">
+                                <option value="10ft">10' STANDARD CONTAINER</option>
+                                <option value="20ft">20' STANDARD CONTAINER</option>
+                                <option value="40ft">40' STANDARD CONTAINER</option>
+                                <option value="40ft_hc">40' HIGH CUBE</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="containerQuantity" class="block text-sm font-medium text-gray-600 mb-2">Quantity</label>
+                            <input type="number" id="containerQuantity" value="1" min="1" class="mt-1 block w-full rounded-md shadow-sm input-field-light" />
+                        </div>
+                        <div>
+                            <label for="weightPerContainer" class="block text-sm font-medium text-gray-600 mb-2">Weight/Cnt (MT)</label>
+                            <input type="number" id="weightPerContainer" value="10" min="0.1" step="0.1" class="mt-1 block w-full rounded-md shadow-sm input-field-light" />
+                        </div>
+                    </div>
+                    <button id="addAnotherContainerBtn" class="w-full md:w-auto px-6 py-3 rounded-xl font-semibold text-gray-800 bg-gray-200 hover:bg-gray-300 transition duration-300 ease-in-out transform hover:scale-105">
+                        Add Container (Conceptual)
+                    </button>
+                </div>
+
+                <!-- Total Weight Input for Loose Cargo/Bulk -->
+                <div id="looseBulkWeightInputGroup" class="hidden">
+                    <label for="totalLooseBulkWeight" class="block text-sm font-medium text-gray-600 mb-2">Total Weight (MT)</label>
+                    <input type="number" id="totalLooseBulkWeight" placeholder="e.g., 50 MT" min="0.1" step="0.1" class="mt-1 block w-full rounded-md shadow-sm input-field-light" />
+                </div>
+
+
+                <button id="proceedToShipmentBtn" class="w-full px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                    Proceed to Shipment Details
+                </button>
+            </div>
+
+            <div id="shipmentDetailsSection" class="space-y-6 mt-8 hidden">
+                <h2 class="emissions-calc-title">EMISSIONS CALCULATOR</h2>
+                <div id="cargoSummary" class="bg-gray-50 p-4 rounded-lg border border-gray-200 text-sm text-gray-700 mb-6 grid grid-cols-2 gap-2">
+                    <p><strong>Total Weight:</strong> <span id="summaryTotalWeight">0 MT</span></p>
+                    <p><strong>Load Type:</strong> <span id="summaryLoadType">Containers</span></p>
+                    <p><strong>Temperature:</strong> <span id="summaryTemperature">Dry</span></p>
+                    <p><strong>Total Container:</strong> <span id="summaryTotalContainer">0</span></p>
+                </div>
+
+                <!-- Mode Selection Buttons -->
+                <label class="block text-lg font-medium text-gray-800 mb-4">Add a shipment leg to calculate the emissions</label>
+                <div id="modeSelection" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                    <button class="mode-button" data-mode="sea">
+                        <i class="fas fa-ship"></i>
+                        <span>Sea</span>
+                    </button>
+                    <button class="mode-button" data-mode="road">
+                        <i class="fas fa-truck"></i>
+                        <span>Road</span>
+                    </button>
+                    <button class="mode-button" data-mode="rail">
+                        <i class="fas fa-train"></i>
+                        <span>Rail</span>
+                    </button>
+                    <button class="mode-button" data-mode="barge">
+                        <i class="fas fa-ship fa-flip-horizontal"></i>
+                        <span>Barge</span>
+                    </button>
+                </div>
+
+                <!-- Transport Leg Inputs -->
+                <div id="transportLegsInputContainer" class="space-y-4 border border-gray-200 p-4 rounded-lg bg-gray-50">
+                    <!-- Initial Leg - will be added by JS -->
+                </div>
+
+                <button
+                    id="addRouteBtn"
+                    class="w-full md:w-auto px-6 py-3 rounded-xl font-semibold text-gray-800 bg-gray-200 hover:bg-gray-300 transition duration-300 ease-in-out transform hover:scale-105"
+                >
+                    Add Route
+                </button>
+
+                <button
+                    id="calculateEmissionsShipmentBtn"
+                    class="w-full px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                    Calculate
+                </button>
+            </div>
+
+            <!-- Calculator Result Table Display Area - REDESIGNED -->
+            <div id="calculatorResultTableContainer" class="mt-8 p-6 rounded-lg text-center hidden bg-white border border-gray-200 shadow-md">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 text-left">Emissions Summary</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white rounded-lg overflow-hidden text-left text-sm">
+                        <thead>
+                            <tr class="table-header">
+                                <th class="table-cell">TEU</th>
+                                <th class="table-cell">TONS</th>
+                                <th class="table-cell">Container Type</th>
+                                <th class="table-cell">POL Name</th>
+                                <th class="table-cell">POD Name</th>
+                                <th class="table-cell">Distance (Miles)</th>
+                                <th class="table-cell">Est. Transit Time (Days)</th>
+                                <th class="table-cell">TONS CO2e</th>
+                                <th class="table-cell">Potential Reduction (TONS CO2e)</th>
+                                <th class="table-cell">Potential New Emission (TONS CO2e)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emissionsResultTableBody">
+                            <!-- Dynamic rows will be inserted here -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="total-sum">
+                                <td colspan="7" class="table-cell text-right">TOTAL SUM</td>
+                                <td id="totalSumCO2e" class="table-cell font-bold">0.00</td>
+                                <td id="totalSumReduction" class="table-cell font-bold">0.00</td>
+                                <td id="totalSumNewEmission" class="table-cell font-bold">0.00</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="mt-8">
+                    <button id="biofuelSolutionBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-300">
+                        Explore Biofuel Solution (Conceptual)
+                    </button>
+                    <p class="text-sm text-gray-600 mt-4">
+                        <strong class="text-purple-600">Note:</strong> These are simplified calculations for demonstration based on assumed factors.
+                        ChopChop's full platform adheres strictly to Global Logistics Emissions Council (GLEC) frameworks for comprehensive Tank-to-Wheel (TTW) and Well-to-Tank (WTT) calculations.
+                    </p>
+                </div>
+                
+                <!-- Call to action for green projects -->
+                <button id="callToActionProjectBtnResults" class="mt-5 bg-teal-700 hover:bg-teal-800 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900">
+                    Explore Decarbonisation Projects
+                </button>
+            </div>
+        </div>
+
+        <!-- Green Projects Tab Content -->
+        <div id="projectsContent" class="tab-content hidden">
+            <p class="text-gray-300 text-center mb-8">
+                Accelerate your decarbonisation journey. Register your green projects and connect with investors.
+            </p>
+
+            <!-- Project Registration Form -->
+            <form id="projectRegistrationForm" class="space-y-6 bg-gray-700 p-6 rounded-lg border border-teal-700" onsubmit="return false;">
+                <h3 class="text-xl font-bold text-teal-300 text-center mb-4">Register Your Decarbonisation Project</h3>
+                <div>
+                    <label for="companyName" class="block text-sm font-medium text-gray-300 mb-2">Company Name</label>
+                    <input type="text" id="companyName" placeholder="e.g., SwiftLogistics LLC" class="mt-1 block w-full rounded-md shadow-sm input-field" />
+                </div>
+                <div>
+                    <label for="projectTitle" class="block text-sm font-medium text-gray-300 mb-2">Project Title</label>
+                    <input type="text" id="projectTitle" placeholder="e.g., Fleet Electrification - Phase 1" class="mt-1 block w-full rounded-md shadow-sm input-field" />
+                </div>
+                <div>
+                    <label for="projectDescription" class="block text-sm font-medium text-gray-300 mb-2">Project Description</label>
+                    <textarea id="projectDescription" rows="3" placeholder="e.g., Replacing 5 diesel trucks with electric trucks to reduce Scope 1 emissions." class="mt-1 block w-full rounded-md shadow-sm input-field"></textarea>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="estimatedReduction" class="block text-sm font-medium text-gray-300 mb-2">Estimated Annual Carbon Reduction (tCO2e)</label>
+                        <input type="number" id="estimatedReduction" placeholder="e.g., 500" class="mt-1 block w-full rounded-md shadow-sm input-field" min="0" step="1" />
+                    </div>
+                    <div>
+                        <label for="fundingRequired" class="block text-sm font-medium text-gray-300 mb-2">Funding Required (USD)</label>
+                        <input type="number" id="fundingRequired" placeholder="e.g., 250000" class="mt-1 block w-full rounded-md shadow-sm input-field" min="10000" step="1000" />
+                    </div>
+                </div>
+                <div>
+                    <label for="projectDuration" class="block text-sm font-medium text-gray-300 mb-2">Project Duration (Months)</label>
+                    <input type="number" id="projectDuration" placeholder="e.g., 12" class="mt-1 block w-full rounded-md shadow-sm input-field" min="1" />
+                </div>
+                <button
+                    id="submitProjectBtn"
+                    class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-4 rounded-md shadow-xl transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+                >
+                    Submit Project for Review
+                </button>
+                <p class="text-sm text-gray-400 text-center mt-4">
+                    <strong class="text-teal-400">Note:</strong> A conceptual 3% success fee applies to successfully funded projects.
+                </p>
+            </form>
+
+            <!-- My Registered Projects / Project Dashboard -->
+            <div id="myProjectsSection" class="mt-8 hidden">
+                <h3 class="text-xl font-bold text-teal-300 mb-4 text-center">My Registered Projects</h3>
+                <!-- Conceptual Analytics/Scalability Hint -->
+                <div class="bg-gray-700 p-4 rounded-lg border border-teal-800 text-center mb-6">
+                    <p class="text-lg font-semibold text-teal-400">Overall Decarbonisation Impact:</p>
+                    <p class="text-2xl font-bold text-white mt-2">~1,250 tCO2e Saved (Conceptual)</p>
+                    <p class="text-sm text-gray-400">Tracked across all your initiatives & future trends.</p>
+                </div>
+                <div id="projectList" class="space-y-4">
+                    <!-- Dynamic project cards will be rendered here by JavaScript -->
+                </div>
+            </div>
+            <div id="noProjectsMessage" class="mt-8 text-center text-gray-400 hidden">
+                <p>You haven't registered any projects yet. Use the form above to get started!</p>
+            </div>
+        </div>
+
+        <!-- Lender Portal Tab Content -->
+        <div id="lenderContent" class="tab-content hidden">
+            <h2 class="text-2xl font-bold text-teal-300 text-center mb-6">Lender Portal (Conceptual)</h2>
+            <p class="text-gray-300 text-center mb-8">
+                Explore a curated list of green logistics projects seeking funding.
+            </p>
+            <div id="lenderProjectList" class="space-y-4">
+                <!-- Mock Project Card 1 for Lender View -->
+                <div class="project-card bg-gray-800 p-5 rounded-lg border border-green-700">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="text-xl font-semibold text-green-400">Electric Last Mile Delivery Expansion</h4>
+                            <p class="text-sm text-gray-400">GreenFleet Logistics Inc.</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-600 text-white">Seeking Funding</span>
+                    </div>
+                    <p class="text-gray-300 mb-3">Funding for 10 new electric vans to expand eco-friendly delivery services in downtown areas, reducing urban air pollution and noise.</p>
+                    <div class="grid grid-cols-2 gap-2 text-sm text-gray-400">
+                        <p><strong>Est. Reduction:</strong> 75 tCO2e/year</p>
+                        <p><strong>Funding Req.:</strong> $180,000 USD</p>
+                        <p><strong>Impact:</strong> <span class="text-green-300 font-bold">High UAE Green Impact</span></p>
+                        <p><strong>Duration:</strong> 10 Months</p>
+                    </div>
+                    <button class="mt-4 w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out">
+                        Invest Now (Conceptual)
+                    </button>
+                </div>
+
+                <!-- Mock Project Card 2 for Lender View -->
+                <div class="project-card bg-gray-800 p-5 rounded-lg border border-green-700">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="text-xl font-semibold text-green-400">Solar Panel Installation - Warehouse Roof</h4>
+                            <p class="text-sm text-gray-400">Desert Storage Solutions</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-600 text-white">Seeking Funding</span>
+                    </div>
+                    <p class="text-gray-300 mb-3">Installation of a 50kW solar array on our main warehouse to power operations with renewable energy, reducing grid dependency.</p>
+                    <div class="grid grid-cols-2 gap-2 text-sm text-gray-400">
+                        <p><strong>Est. Reduction:</strong> 150 tCO2e/year</p>
+                        <p><strong>Funding Req.:</strong> $320,000 USD</p>
+                        <p><strong>Impact:</strong> <span class="text-green-300 font-bold">Moderate UAE Green Impact</span></p>
+                        <p><strong>Duration:</strong> 8 Months</p>
+                    </div>
+                    <button class="mt-4 w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out">
+                        Invest Now (Conceptual)
+                    </button>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 mt-8 text-center flex items-center justify-center">
+                <svg class="w-4 h-4 mr-1 text-teal-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2.928 5.828a1 1 0 00-1.414 1.414L8.586 14A1 1 0 0010 14h.001a1 1 0 00.707-.293l7-7a1 1 0 00-1.414-1.414L10 11.586l-6.293-6.293a1 1 0 00-1.414 0z" clip-rule="evenodd"></path></svg>
+                All projects verified for compliance with UAE green finance guidelines.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Global Elements ---
+            const mainContainer = document.querySelector('.bg-gray-900');
+
+            // --- Tab Elements ---
+            const onboardingTab = document.getElementById('onboardingTab');
+            const calculatorTab = document.getElementById('calculatorTab');
+            const projectsTab = document.getElementById('projectsTab');
+            const lenderTab = document.getElementById('lenderTab');
+
+            const onboardingContent = document.getElementById('onboardingContent');
+            const calculatorContent = document.getElementById('calculatorContent');
+            const projectsContent = document.getElementById('projectsContent');
+            const lenderContent = document.getElementById('lenderContent');
+
+            // --- SME Onboarding Elements ---
+            const loginRegisterBtn = document.getElementById('loginRegisterBtn');
+            const onboardCompanyNameInput = document.getElementById('onboardCompanyName');
+            const tradeLicenseInput = document.getElementById('tradeLicense');
+            const verificationStatusSpan = document.getElementById('verificationStatus');
+            const verifyBtn = document.getElementById('verifyBtn');
+
+            // --- Calculator Elements (New Design) ---
+            const cargoDetailsSection = document.getElementById('cargoDetailsSection');
+            const shipmentDetailsSection = document.getElementById('shipmentDetailsSection');
+            const proceedToShipmentBtn = document.getElementById('proceedToShipmentBtn');
+
+            const loadTypeRadios = document.querySelectorAll('input[name="loadType"]');
+            const tempReeferToggle = document.getElementById('tempReeferToggle');
+            const weightUnitToggle = document.getElementById('weightUnitToggle');
+            const containerDetailsInputs = document.getElementById('containerDetailsInputs');
+            const containerSizeSelect = document.getElementById('containerSize');
+            const containerQuantityInput = document.getElementById('containerQuantity');
+            const weightPerContainerInput = document.getElementById('weightPerContainer');
+            const addAnotherContainerBtn = document.getElementById('addAnotherContainerBtn'); // Conceptual for now
+            const looseBulkWeightInputGroup = document.getElementById('looseBulkWeightInputGroup');
+            const totalLooseBulkWeightInput = document.getElementById('totalLooseBulkWeight');
+
+
+            const cargoSummaryTotalWeight = document.getElementById('summaryTotalWeight');
+            const cargoSummaryLoadType = document.getElementById('summaryLoadType');
+            const cargoSummaryTemperature = document.getElementById('summaryTemperature');
+            const cargoSummaryTotalContainer = document.getElementById('summaryTotalContainer');
+
+            const modeSelectionButtons = document.querySelectorAll('.mode-button');
+            const transportLegsInputContainer = document.getElementById('transportLegsInputContainer');
+            const addRouteBtn = document.getElementById('addRouteBtn');
+            const calculateEmissionsShipmentBtn = document.getElementById('calculateEmissionsShipmentBtn');
+            const emissionsResultTableBody = document.getElementById('emissionsResultTableBody');
+            const totalSumCO2e = document.getElementById('totalSumCO2e');
+            const totalSumReduction = document.getElementById('totalSumReduction');
+            const totalSumNewEmission = document.getElementById('totalSumNewEmission');
+            const calculatorResultTableContainer = document.getElementById('calculatorResultTableContainer');
+            const biofuelSolutionBtn = document.getElementById('biofuelSolutionBtn');
+            const callToActionProjectBtnResults = document.getElementById('callToActionProjectBtnResults'); // From results table
+
+            // --- Green Projects Elements ---
+            const projectRegistrationForm = document.getElementById('projectRegistrationForm');
+            const companyNameInput = document.getElementById('companyName');
+            const projectTitleInput = document.getElementById('projectTitle');
+            const projectDescriptionInput = document.getElementById('projectDescription');
+            const estimatedReductionInput = document.getElementById('estimatedReduction');
+            const fundingRequiredInput = document.getElementById('fundingRequired');
+            const projectDurationInput = document.getElementById('projectDuration');
+            const submitProjectBtn = document.getElementById('submitProjectBtn');
+            const myProjectsSection = document.getElementById('myProjectsSection');
+            const projectList = document.getElementById('projectList');
+            const noProjectsMessage = document.getElementById('noProjectsMessage');
+
+            // --- Data Storage (Client-side only for prototype) ---
+            let registeredProjects = []; 
+            let selectedMode = ''; // To store the currently selected transport mode icon
+
+            // Cargo Details state
+            let currentCargo = {
+                loadType: 'containers',
+                temperature: 'Dry',
+                weightUnit: 'MT',
+                containerSize: '10ft',
+                containerQuantity: 1,
+                weightPerContainer: 10, // in MT
+                totalWeightMT: 0
+            };
+
+            // Simplified Emission Factors (WTW - Well-to-Wheel, in kg CO2e per kg-km)
+            // Updated to be more granular and converted to kg CO2e per MT-km for easier calculation with MT inputs.
+            // 1 MT = 1000 kg. So, if factor was kgCO2e/kg-km, for MT-km multiply by 1000.
+            const emissionFactorsMT = {
+                // These are indicative average values, not exact GLEC, but more varied for demo
+                sea: 0.010,   // ~10 g CO2e/tkm -> 0.01 kg CO2e/MT-km
+                road: 0.090,  // ~90 g CO2e/tkm -> 0.09 kg CO2e/MT-km
+                rail: 0.030,  // ~30 g CO2e/tkm -> 0.03 kg CO2e/MT-km
+                barge: 0.020  // Placeholder for barge
+            };
+
+            // --- Mock Location Data for Distance Calculation ---
+            const mockLocationDistances = {
+                // Format: "Location1__Location2" -> distance in KM
+                'Jebel Ali, United Arab Emirates__Kochi, Japan': 11048, // Approx 6865 miles
+                'Jebel Ali__Mumbai': 2500,
+                'Dubai__Abu Dhabi': 140, // Road
+                'Jebel Ali Port__Sokhna Port': 1800, 
+                'Sokhna Port__London Gateway': 3500,
+                'Port of Singapore__Port of Rotterdam': 15000,
+                'Port of New York__Port of Hamburg': 6200,
+                'Warehouse, Dubai__Jebel Ali Port': 50,
+                'Sokhna Port__Cairo Distribution Centre': 120,
+                'London Gateway__Manchester Depot': 350,
+                'Hamburg Port__Berlin Logistics Hub': 280,
+                'Dubai Cargo Village__DXB Airport': 15, 
+                'DXB Airport__LHR Airport': 5500, 
+                'JFK Airport__LAX Airport': 3900,
+                'Dubai__Riyadh': 870,
+                'Doha__Kuwait City': 600,
+                'Fujairah Port__Muscat Port': 400
+            };
+
+            // --- Calculator Cargo Details Logic ---
+            // Moved function definitions to top of the script scope
+            const updateCargoInputVisibility = () => {
+                if (currentCargo.loadType === 'containers') {
+                    containerDetailsInputs.classList.remove('hidden');
+                    looseBulkWeightInputGroup.classList.add('hidden');
+                } else {
+                    containerDetailsInputs.classList.add('hidden');
+                    looseBulkWeightInputGroup.classList.remove('hidden');
+                }
+            };
+
+            const updateTotalWeight = () => {
+                if (currentCargo.loadType === 'containers') {
+                    currentCargo.totalWeightMT = currentCargo.containerQuantity * currentCargo.weightPerContainer;
+                } else {
+                    currentCargo.totalWeightMT = parseFloat(totalLooseBulkWeightInput.value || '0');
+                    if (currentCargo.weightUnit === 'KG') {
+                        currentCargo.totalWeightMT /= 1000;
+                    }
+                }
+            };
+            
+            // --- Helper to switch tabs ---
+            const switchTab = (activeTabId) => {
+                const tabs = [onboardingTab, calculatorTab, projectsTab, lenderTab];
+                const contents = [onboardingContent, calculatorContent, projectsContent, lenderContent];
+
+                tabs.forEach(tab => {
+                    if (tab.id === activeTabId) {
+                        tab.classList.add('active');
+                        tab.classList.remove('inactive');
+                    } else {
+                        tab.classList.remove('active');
+                        tab.classList.add('inactive');
+                    }
+                });
+
+                contents.forEach(content => {
+                    if (content.id.replace('Content', 'Tab') === activeTabId) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+
+                if (activeTabId === 'projectsTab') {
+                    renderProjects();
+                } else if (activeTabId === 'calculatorTab') {
+                    // Reset calculator view to cargo details when re-entering the tab
+                    cargoDetailsSection.classList.remove('hidden');
+                    shipmentDetailsSection.classList.add('hidden');
+                    calculatorResultTableContainer.classList.add('hidden');
+                    // Ensure the correct input group is visible based on initial cargo type
+                    updateCargoInputVisibility(); 
+                }
+            };
+
+            // --- Initial Tab Setup ---
+            // Moved this after function definitions that it calls
+            switchTab('calculatorTab');
+
+            // --- Tab Switching Event Listeners ---
+            onboardingTab.addEventListener('click', () => switchTab('onboardingTab'));
+            calculatorTab.addEventListener('click', () => switchTab('calculatorTab'));
+            projectsTab.addEventListener('click', () => switchTab('projectsTab'));
+            lenderTab.addEventListener('click', () => switchTab('lenderTab'));
+
+            // --- SME Onboarding Logic (Conceptual) ---
+            loginRegisterBtn.addEventListener('click', () => {
+                switchTab('onboardingTab');
+                onboardCompanyNameInput.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            verifyBtn.addEventListener('click', () => {
+                const companyName = onboardCompanyNameInput.value.trim();
+                const tradeLicense = tradeLicenseInput.value.trim();
+
+                if (companyName && tradeLicense) {
+                    verificationStatusSpan.textContent = 'Verifying...';
+                    verificationStatusSpan.classList.remove('text-red-400', 'text-green-400');
+                    verificationStatusSpan.classList.add('text-yellow-400');
+
+                    setTimeout(() => {
+                        verificationStatusSpan.textContent = 'Verified!';
+                        verificationStatusSpan.classList.remove('text-yellow-400');
+                        verificationStatusSpan.classList.add('text-green-400');
+                        alert('Company verified successfully! You now have access to ChopChop features.');
+                    }, 1500);
+                } else {
+                    alert('Please fill in Company Name and Trade License to simulate verification.');
+                }
+            });
+
+
+            loadTypeRadios.forEach(radio => {
+                radio.addEventListener('change', (event) => {
+                    currentCargo.loadType = event.target.value;
+                    updateCargoInputVisibility();
+                    updateTotalWeight();
+                });
+            });
+
+            tempReeferToggle.addEventListener('change', (event) => {
+                currentCargo.temperature = event.target.checked ? 'Reefer' : 'Dry';
+            });
+
+            weightUnitToggle.addEventListener('change', (event) => {
+                currentCargo.weightUnit = event.target.checked ? 'MT' : 'KG';
+                // For demo, just update placeholder. In real app, convert numerical value
+                if (currentCargo.weightUnit === 'MT') {
+                    totalLooseBulkWeightInput.placeholder = 'e.g., 50 MT';
+                    weightPerContainerInput.placeholder = 'Weight/Cnt (MT)';
+                } else {
+                    totalLooseBulkWeightInput.placeholder = 'e.g., 50000 KG';
+                    weightPerContainerInput.placeholder = 'Weight/Cnt (KG)';
+                }
+                updateTotalWeight();
+            });
+
+            containerSizeSelect.addEventListener('change', (event) => {
+                currentCargo.containerSize = event.target.value;
+                updateTotalWeight();
+            });
+
+            containerQuantityInput.addEventListener('input', (event) => {
+                currentCargo.containerQuantity = parseInt(event.target.value) || 0;
+                updateTotalWeight();
+            });
+
+            weightPerContainerInput.addEventListener('input', (event) => {
+                currentCargo.weightPerContainer = parseFloat(event.target.value) || 0;
+                updateTotalWeight();
+            });
+
+            totalLooseBulkWeightInput.addEventListener('input', (event) => {
+                currentCargo.totalWeightMT = parseFloat(event.target.value) || 0;
+                if (currentCargo.weightUnit === 'KG') {
+                    currentCargo.totalWeightMT /= 1000; // Convert KG to MT for internal calculation consistency
+                }
+                updateTotalWeight(); // This call won't change itself but will update the summary
+            });
+
+
+            // Conceptual "Add Another Container" button
+            addAnotherContainerBtn.addEventListener('click', () => {
+                alert('This feature (adding multiple distinct containers) is conceptual for the prototype. The calculator proceeds with overall cargo weight.');
+            });
+
+            
+            // Initial update for cargo details visibility and total weight
+            updateCargoInputVisibility();
+            updateTotalWeight();
+
+            proceedToShipmentBtn.addEventListener('click', () => {
+                // Basic validation for cargo details before proceeding
+                if (currentCargo.loadType === 'containers') {
+                    if (currentCargo.containerQuantity <= 0 || isNaN(currentCargo.containerQuantity) || currentCargo.weightPerContainer <= 0 || isNaN(currentCargo.weightPerContainer)) {
+                        alert('Please enter valid Quantity and Weight per Container for containerized cargo.');
+                        return;
+                    }
+                } else {
+                    if (currentCargo.totalWeightMT <= 0 || isNaN(currentCargo.totalWeightMT)) {
+                         alert(`Please enter a valid Total Weight for ${currentCargo.loadType}.`);
+                         return;
+                    }
+                }
+                
+                // Update summary section
+                cargoSummaryTotalWeight.textContent = `${currentCargo.totalWeightMT.toFixed(2)} MT`;
+                cargoSummaryLoadType.textContent = currentCargo.loadType.charAt(0).toUpperCase() + currentCargo.loadType.slice(1);
+                cargoSummaryTemperature.textContent = currentCargo.temperature;
+                cargoSummaryTotalContainer.textContent = currentCargo.loadType === 'containers' ? currentCargo.containerQuantity : 'N/A';
+
+
+                cargoDetailsSection.classList.add('hidden');
+                shipmentDetailsSection.classList.remove('hidden');
+                calculatorResultTableContainer.classList.add('hidden'); // Ensure results are hidden initially
+                // Add initial route leg for shipment details
+                transportLegsInputContainer.innerHTML = ''; // Clear previous legs if any
+                createTransportLegShipment();
+            });
+
+            // --- Calculator Shipment Details Logic ---
+            let shipmentLegsData = []; // To store data for each added leg
+
+            modeSelectionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    modeSelectionButtons.forEach(btn => btn.classList.remove('selected'));
+                    button.classList.add('selected');
+                    selectedMode = button.dataset.mode;
+                    // Trigger addition of a new leg with selected mode
+                    addRouteBtn.click(); // Simulate clicking add route button
+                });
+            });
+
+
+            // Function to create a new transport leg HTML element for shipment details
+            const createTransportLegShipment = () => {
+                const legDiv = document.createElement('div');
+                legDiv.className = 'transport-leg-item bg-white p-4 rounded-lg border border-gray-200 shadow-sm relative mb-4';
+                legDiv.innerHTML = `
+                    <button type="button" class="remove-leg-btn absolute top-2 right-2 text-gray-400 hover:text-red-500 hidden">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mb-4">
+                        <div class="relative">
+                            <label for="legFrom" class="block text-sm font-medium text-gray-600 mb-2">Origin of shipment</label>
+                            <div class="flex items-center input-field-light rounded-md border border-gray-300">
+                                <i class="fas fa-map-marker-alt text-gray-400 ml-3"></i>
+                                <input type="text" placeholder="e.g., Jebel Ali, United Arab Emirates" class="flex-grow p-2 bg-transparent outline-none leg-from-input" />
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center -mt-2 md:mt-6">
+                            <i class="fas fa-exchange-alt swap-icon" title="Swap From/To"></i>
+                        </div>
+                        <div class="relative md:col-span-1">
+                            <label for="legTo" class="block text-sm font-medium text-gray-600 mb-2">Destination of shipment</label>
+                            <div class="flex items-center input-field-light rounded-md border border-gray-300">
+                                <i class="fas fa-map-marker-alt text-gray-400 ml-3"></i>
+                                <input type="text" placeholder="e.g., Kochi, Japan" class="flex-grow p-2 bg-transparent outline-none leg-to-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 items-end">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-2">Unit</label>
+                            <select class="mt-1 block w-full rounded-md shadow-sm select-field-light leg-unit">
+                                <option value="MT">MT</option>
+                                <option value="Tons">Tons</option>
+                                <option value="KG">KG</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-2">QT.</label>
+                            <input type="number" value="1" min="1" class="mt-1 block w-full rounded-md shadow-sm input-field-light leg-qty" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-2">Container Type</label>
+                            <select class="mt-1 block w-full rounded-md shadow-sm select-field-light leg-container-type">
+                                <option value="Dry">Dry</option>
+                                <option value="Reefer">Reefer</option>
+                            </select>
+                        </div>
+                        <button type="button" class="w-full px-4 py-2 rounded-xl font-semibold text-white bg-purple-500 hover:bg-purple-600 transition duration-300 search-leg-btn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                `;
+                transportLegsInputContainer.appendChild(legDiv);
+
+                updateRemoveButtonsVisibilityShipment(); // Update visibility for shipment legs
+
+                // Add event listeners for this new leg
+                legDiv.querySelector('.remove-leg-btn').addEventListener('click', () => {
+                    legDiv.remove();
+                    updateRemoveButtonsVisibilityShipment();
+                });
+
+                legDiv.querySelector('.swap-icon').addEventListener('click', () => {
+                    const fromInput = legDiv.querySelector('.leg-from-input');
+                    const toInput = legDiv.querySelector('.leg-to-input');
+                    const temp = fromInput.value;
+                    fromInput.value = toInput.value;
+                    toInput.value = temp;
+                });
+
+                legDiv.querySelector('.search-leg-btn').addEventListener('click', () => {
+                    handleLegDistanceLookup(legDiv);
+                });
+            };
+
+            const updateRemoveButtonsVisibilityShipment = () => {
+                const removeButtons = document.querySelectorAll('#transportLegsInputContainer .remove-leg-btn');
+                if (removeButtons.length <= 1) {
+                    removeButtons.forEach(btn => btn.classList.add('hidden'));
+                } else {
+                    removeButtons.forEach(btn => btn.classList.remove('hidden'));
+                }
+            };
+
+            const handleLegDistanceLookup = (legDiv) => {
+                const fromInput = legDiv.querySelector('.leg-from-input');
+                const toInput = legDiv.querySelector('.leg-to-input');
+                const from = fromInput.value.trim();
+                const to = toInput.value.trim();
+
+                if (!from || !to) {
+                    alert('Please enter both "From" and "To" locations for this leg to search distance.');
+                    return;
+                }
+
+                alert(`Simulating search for distance between "${from}" and "${to}". A real system would use a mapping API to get precise distance and transit time.`);
+                // For prototype, we'll just store the mock distance on calculate.
+            };
+
+
+            addRouteBtn.addEventListener('click', () => createTransportLegShipment());
+
+            // --- Main Emissions Calculation Logic (Shipment) ---
+            calculateEmissionsShipmentBtn.addEventListener('click', () => {
+                let totalCO2e = 0;
+                let totalReduction = 0;
+                let totalNewEmission = 0;
+                let totalDistanceMiles = 0;
+                let validLegs = true;
+                emissionsResultTableBody.innerHTML = ''; // Clear previous results
+
+                const shipmentLegs = document.querySelectorAll('#transportLegsInputContainer .transport-leg-item');
+                if (shipmentLegs.length === 0) {
+                    alert('Please add at least one route leg.');
+                    return;
+                }
+
+                shipmentLegs.forEach((legDiv, index) => {
+                    const from = legDiv.querySelector('.leg-from-input').value.trim();
+                    const to = legDiv.querySelector('.leg-to-input').value.trim();
+                    const unit = legDiv.querySelector('.leg-unit').value;
+                    const qty = parseInt(legDiv.querySelector('.leg-qty').value);
+                    const containerType = legDiv.querySelector('.leg-container-type').value;
+
+                    // Use the globally calculated total weight from Cargo Details
+                    let actualWeightMT = currentCargo.totalWeightMT; 
+                    if (currentCargo.loadType !== 'containers' && unit === 'KG') {
+                        actualWeightMT = parseFloat(totalLooseBulkWeightInput.value) / 1000;
+                    } else if (currentCargo.loadType !== 'containers') {
+                        actualWeightMT = parseFloat(totalLooseBulkWeightInput.value);
+                    }
+
+
+                    if (!from || !to || isNaN(qty) || qty <= 0 || actualWeightMT <= 0 || isNaN(actualWeightMT)) {
+                        validLegs = false;
+                        alert(`Please fill all details and ensure valid quantities for Leg ${index + 1}.`);
+                        return;
+                    }
+
+                    // For demo, pick a mode based on what's selected, or a default
+                    const mode = selectedMode || 'sea'; // Default to sea if no mode selected by iconic buttons
+
+                    // Get mock distance (KM)
+                    let distanceKM = mockLocationDistances[`${from}__${to}`] || mockLocationDistances[`${to}__${from}`];
+                    if (!distanceKM) {
+                        // Fallback if specific route not found in mock data
+                        distanceKM = 1000 + Math.floor(Math.random() * 5000); // Random distance for demo
+                        // alert(`Mock distance not found for ${from} to ${to}. Using a random distance for demo purposes.`); // Removed for less popups
+                    }
+
+                    const distanceMiles = distanceKM * 0.621371; // Convert KM to Miles
+                    const estimatedTransitTimeDays = Math.max(1, Math.floor(distanceKM / (mode === 'air' ? 800 : mode === 'sea' ? 20 : mode === 'road' ? 60 : 30))); // Mock transit time
+
+                    const emissionFactorPerMtKm = emissionFactorsMT[mode];
+                    const tonsCO2e = (actualWeightMT * distanceKM * emissionFactorPerMtKm) / 1000; // Convert kgCO2e to tonsCO2e
+
+                    // Mock reductions/new emissions for Biofuel solution
+                    const potentialReductionTonsCO2e = tonsCO2e * 0.15; // 15% reduction
+                    const potentialNewEmissionTonsCO2e = tonsCO2e - potentialReductionTonsCO2e;
+
+                    totalCO2e += tonsCO2e;
+                    totalReduction += potentialReductionTonsCO2e;
+                    totalNewEmission += potentialNewEmissionTonsCO2e;
+                    totalDistanceMiles += distanceMiles;
+
+                    const row = `
+                        <tr class="table-row">
+                            <td class="table-cell">${(currentCargo.loadType === 'containers' ? actualWeightMT / 10 : 'N/A').toFixed(1)}</td> <!-- Mock TEU: 10 MT per TEU -->
+                            <td class="table-cell">${actualWeightMT.toFixed(1)}</td>
+                            <td class="table-cell">${currentCargo.loadType === 'containers' ? containerType : currentCargo.loadType}</td>
+                            <td class="table-cell">${from}</td>
+                            <td class="table-cell">${to}</td>
+                            <td class="table-cell">${distanceMiles.toFixed(0)}</td>
+                            <td class="table-cell">${estimatedTransitTimeDays}</td>
+                            <td class="table-cell">${tonsCO2e.toFixed(2)}</td>
+                            <td class="table-cell">${potentialReductionTonsCO2e.toFixed(2)}</td>
+                            <td class="table-cell">${potentialNewEmissionTonsCO2e.toFixed(2)}</td>
+                        </tr>
+                    `;
+                    emissionsResultTableBody.insertAdjacentHTML('beforeend', row);
+                });
+
+                if (!validLegs) {
+                    calculatorResultTableContainer.classList.add('hidden');
+                    return; // Stop if any leg was invalid
+                }
+
+                // Update total sums in the table footer
+                totalSumCO2e.textContent = totalCO2e.toFixed(2);
+                totalSumReduction.textContent = totalReduction.toFixed(2);
+                totalSumNewEmission.textContent = totalNewEmission.toFixed(2);
+
+                calculatorResultTableContainer.classList.remove('hidden'); // Show results table
+                alert(`Calculation Complete! Total Estimated Emissions: ${totalCO2e.toFixed(2)} TONS CO2e.`);
+            });
+
+            biofuelSolutionBtn.addEventListener('click', () => {
+                alert('Exploring Biofuel Solutions would involve detailed analysis and potentially connecting with specialized suppliers. This button is conceptual.');
+            });
+            callToActionProjectBtnResults.addEventListener('click', () => {
+                switchTab('projectsTab'); // Use switchTab helper
+                projectRegistrationForm.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // --- Project Submission & Display Functions ---
+            submitProjectBtn.addEventListener('click', () => {
+                const companyName = companyNameInput.value.trim();
+                const projectTitle = projectTitleInput.value.trim();
+                const projectDescription = projectDescriptionInput.value.trim();
+                const estimatedReduction = parseFloat(estimatedReductionInput.value);
+                const fundingRequired = parseFloat(fundingRequiredInput.value);
+                const projectDuration = parseInt(projectDurationInput.value);
+
+                if (!companyName) { alert('Please enter the Company Name.'); return; }
+                if (!projectTitle) { alert('Please enter the Project Title.'); return; }
+                if (!projectDescription) { alert('Please enter the Project Description.'); return; }
+                if (isNaN(estimatedReduction) || estimatedReduction <= 0) { alert('Please enter a valid positive Estimated Annual Carbon Reduction (tCO2e).'); return; }
+                if (isNaN(fundingRequired) || fundingRequired < 10000 || fundingRequired > 500000) {
+                    alert('Please enter a valid Funding Required (USD) between $10,000 and $500,000.');
+                    return;
+                }
+                if (isNaN(projectDuration) || projectDuration <= 0) { alert('Please enter a valid positive Project Duration (Months).'); return; }
+
+                const newProject = {
+                    id: Date.now(),
+                    companyName: companyName,
+                    projectTitle: projectTitle,
+                    projectDescription: projectDescription,
+                    estimatedReduction: estimatedReduction,
+                    fundingRequired: fundingRequired,
+                    projectDuration: projectDuration,
+                    status: 'Pending Review',
+                    fundsRaised: 0,
+                    progress: 0
+                };
+
+                registeredProjects.push(newProject);
+                renderProjects();
+                alert('Your project has been submitted for review! It will appear in "My Registered Projects".');
+                projectRegistrationForm.reset();
+            });
+
+            function renderProjects() {
+                projectList.innerHTML = '';
+
+                if (registeredProjects.length === 0) {
+                    myProjectsSection.classList.add('hidden');
+                    noProjectsMessage.classList.remove('hidden');
+                } else {
+                    myProjectsSection.classList.remove('hidden');
+                    noProjectsMessage.classList.add('hidden');
+                    
+                    registeredProjects.forEach(project => {
+                        const projectCard = document.createElement('div');
+                        projectCard.className = 'project-card bg-gray-800 p-5 rounded-lg border border-teal-800';
+
+                        let statusColor = 'bg-blue-500';
+                        let purchaseButtonHidden = 'hidden';
+
+                        if (project.status === 'Approved for Funding') {
+                            statusColor = 'bg-green-500';
+                            purchaseButtonHidden = '';
+                        } else if (project.status === 'Funding In Progress') {
+                             statusColor = 'bg-yellow-500';
+                             purchaseButtonHidden = '';
+                        } else if (project.status === 'Project Complete') {
+                            statusColor = 'bg-teal-500';
+                            purchaseButtonHidden = 'hidden';
+                        }
+
+                        const progressWidth = (project.fundsRaised / project.fundingRequired) * 100;
+                        const formattedFundsRaised = project.fundsRaised.toLocaleString();
+                        const formattedFundingRequired = project.fundingRequired.toLocaleString();
+
+
+                        projectCard.innerHTML = `
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="text-xl font-semibold text-teal-400">${project.projectTitle}</h4>
+                                    <p class="text-sm text-gray-400">${project.companyName}</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold ${statusColor} text-white">${project.status}</span>
+                            </div>
+                            <p class="text-gray-300 mb-3">${project.projectDescription}</p>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-400">
+                                <p><strong>Reduction:</strong> ${project.estimatedReduction} tCO2e/year</p>
+                                <p><strong>Funding:</strong> $${formattedFundingRequired} USD</p>
+                                <p><strong>Duration:</strong> ${project.projectDuration} Months</p>
+                                <p><strong>Raised:</strong> <span class="text-teal-300 font-bold">${progressWidth.toFixed(0)}%</span> ($${formattedFundsRaised} USD)</p>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2.5 mt-3">
+                                <div class="bg-teal-500 h-2.5 rounded-full" style="width: ${progressWidth}%;"></div>
+                            </div>
+                            <button class="purchase-button mt-4 w-full bg-teal-800 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded-md ${purchaseButtonHidden}" data-project-id="${project.id}">
+                                Make Purchase via ChopChop
+                            </button>
+                        `;
+                        projectList.appendChild(projectCard);
+
+                        projectCard.querySelector('.purchase-button')?.addEventListener('click', (event) => {
+                            const projectId = parseInt(event.target.dataset.projectId);
+                            const projectToUpdate = registeredProjects.find(p => p.id === projectId);
+
+                            if (projectToUpdate) {
+                                alert(`Simulating purchase for "${projectToUpdate.projectTitle}". In a real ChopChop, funds for this project would be released directly for verified purchases (e.g., to an OEM for electric trucks) and tracked here.`);
+                                
+                                if (projectToUpdate.status !== 'Project Complete') {
+                                    projectToUpdate.fundsRaised = projectToUpdate.fundingRequired;
+                                    projectToUpdate.progress = 100;
+                                    projectToUpdate.status = 'Project Complete';
+                                    renderProjects();
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+
+            // Initial render of projects (for a fresh load)
+            renderProjects();
+        });
+    </script>
+</body>
+</html>
